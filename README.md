@@ -1,0 +1,1 @@
+An example of using Raspberry Pi and Google Coral to implement face detection and recognition.
