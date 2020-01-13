@@ -1,12 +1,35 @@
 import cv2
-import viola_jones.viola_jones_face_detection as face_detection
+import viola_jones_face_detection as face_detection
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
 cap.set(4, 480)
 
+frames = 0
+
+def flush_frames():
+    global frames
+    
+    print("Frames per second: {0}".format(frames))
+    
+    frames = 0
+
+import threading
+
+def set_interval(func, sec):
+    def func_wrapper():
+        set_interval(func, sec)
+        func()
+    t = threading.Timer(sec, func_wrapper)
+    t.start()
+    return t
+
+set_interval(flush_frames, 1)
+
 while True:
     ret, img = cap.read()
+    
+    frames+=1
 
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -18,9 +41,6 @@ while True:
         roi_color = img[y:y + h, x:x + w]
 
     cv2.imshow('video', img)
-
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    print("Frames per second using video.get(cv2.cv.CV_CAP_PROP_FPS): {0}".format(fps))
 
     k = cv2.waitKey(30) & 0xff
 
