@@ -1,0 +1,42 @@
+import cv2
+from PIL import Image
+import google_coral.google_coral_face_detection as face_detection
+
+cap = cv2.VideoCapture(0)
+cap.set(3, 640)
+cap.set(4, 480)
+
+while True:
+    ret, img = cap.read()
+
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    rgb_array = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    image = Image.fromarray(rgb_array)
+
+    detected_faces = face_detection.detect_faces(image)
+
+    for face in detected_faces:
+        bounding_box = face.bounding_box.flatten().astype("int")
+
+        (x1, y1, x2, y2) = bounding_box
+
+        width = x2 - x1
+        height = y2 - y1
+
+        cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 0), 2)
+        roi_gray = gray[y1:y2, x1:x2]
+        roi_color = img[y1:y2, x1:x2]
+
+    cv2.imshow('video', img)
+
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    print("Frames per second using video.get(cv2.cv.CV_CAP_PROP_FPS): {0}".format(fps))
+
+    k = cv2.waitKey(30) & 0xff
+
+    if k == 27:  # press 'ESC' to quit
+        break
+
+cap.release()
+cv2.destroyAllWindows()
