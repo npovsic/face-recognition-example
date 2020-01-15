@@ -8,7 +8,7 @@ import cv2
 import numpy
 from PIL import Image, ImageOps
 
-import google_coral.google_coral_face_detection as face_detection
+import face_detection as face_detection
 
 from pathlib import Path
 

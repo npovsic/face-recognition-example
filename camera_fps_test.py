@@ -1,5 +1,4 @@
 import cv2
-import viola_jones_face_detection as face_detection
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
@@ -9,9 +8,9 @@ frames = 0
 
 def flush_frames():
     global frames
-    
+
     print("Frames per second: {0}".format(frames))
-    
+
     frames = 0
 
 import threading
@@ -24,21 +23,12 @@ def set_interval(func, sec):
     t.start()
     return t
 
-set_interval(flush_frames, 1)
+interval = set_interval(flush_frames, 1)
 
 while True:
     ret, img = cap.read()
-    
+
     frames+=1
-
-    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-    detected_faces = face_detection.detect_faces(gray)
-
-    for (x, y, w, h) in detected_faces:
-        cv2.rectangle(img, (x, y), (x + w, y + h), (255, 0, 0), 2)
-        roi_gray = gray[y:y + h, x:x + w]
-        roi_color = img[y:y + h, x:x + w]
 
     cv2.imshow('video', img)
 
@@ -47,5 +37,7 @@ while True:
     if k == 27:  # press 'ESC' to quit
         break
 
+
+interval.cancel()
 cap.release()
 cv2.destroyAllWindows()

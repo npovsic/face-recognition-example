@@ -1,6 +1,6 @@
 import cv2
 from PIL import Image
-import google_coral_face_detection as face_detection
+import face_detection as face_detection
 
 cap = cv2.VideoCapture(0)
 cap.set(3, 640)
