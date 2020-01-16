@@ -9,7 +9,7 @@ resolutions = [
     [256, 144]
 ]
 
-res_index = 0
+res_index = 5
 
 google_coral = GoogleCoralLiveDetection(resolutions[res_index][0], resolutions[res_index][1])
 
